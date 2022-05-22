@@ -13,19 +13,15 @@
    License:         MIT (X11), see file LICENSE in the base directory
 ============================================================================= */
 
-
 #include <omp.h>
 
 namespace my {
-  ///Namespace for time or timing related methods.
-  namespace time {
+/// Namespace for time or timing related methods.
+namespace time {
 
-    double GetTime() {
-      return omp_get_wtime();
-    }
+double GetTime() { return omp_get_wtime(); }
 
-  }
-}
-
+} // namespace time
+} // namespace my
 
 #endif /*MYTIMER_H_*/

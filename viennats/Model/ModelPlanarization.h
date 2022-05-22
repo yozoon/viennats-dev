@@ -8,50 +8,43 @@
 #ifndef MODELPLANARIZATION_H_
 #define MODELPLANARIZATION_H_
 
-#include <boost/spirit/include/classic.hpp>
 #include "../message.h"
 #include "../parser_actors.h"
+#include <boost/spirit/include/classic.hpp>
 
 namespace model {
-///Chemical mechanical planarization
+/// Chemical mechanical planarization
 
-    class Planarization {
+class Planarization {
 
-        double Coordinate;
-        bool Fill;
+  double Coordinate;
+  bool Fill;
 
-    public:
+public:
+  bool fill_up() const { return Fill; }
 
-        bool fill_up() const {
-            return Fill;
-        }
+  double get_coordinate() const { return Coordinate; }
 
-        double get_coordinate() const {
-            return Coordinate;
-        }
+  Planarization(const std::string &Parameters) : Fill(false) {
+    using namespace boost::spirit::classic;
+    using namespace parser_actors;
 
+    Fill = false;
 
+    bool b =
+        parse(Parameters.begin(), Parameters.end(),
+              *((str_p("coordinate") >> '=' >> real_p[assign_a(Coordinate)] >>
+                 ';') |
+                (str_p("fill_up") >> '=' >>
+                 (str_p("true") | str_p("false"))[assign_bool(Fill)] >> ';')),
+              space_p | comment_p("//") | comment_p("/*", "*/"))
+            .full;
 
-        Planarization(const std::string & Parameters) : Fill(false) {
-            using namespace boost::spirit::classic;
-            using namespace parser_actors;
+    if (!b)
+      msg::print_error("Failed interpreting process parameters!");
+  }
+};
 
-            Fill=false;
-
-            bool b = parse(
-                    Parameters.begin(),
-                    Parameters.end(),
-                    *(
-                            (str_p("coordinate")  >> '='  >>  real_p[assign_a(Coordinate)] >>  ';') |
-                            (str_p("fill_up")  >>  '='  >> (str_p("true") | str_p("false"))[assign_bool(Fill)] >> ';')
-                    ),
-                    space_p | comment_p("//") | comment_p("/*", "*/")).full;
-
-            if (!b) msg::print_error("Failed interpreting process parameters!");
-        }
-    };
-
-
-}
+} // namespace model
 
 #endif /* MODELPLANARIZATION_H_ */

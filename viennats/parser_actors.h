@@ -13,71 +13,61 @@
    License:         MIT (X11), see file LICENSE in the base directory
 ============================================================================= */
 
-
 #include <string>
 
-///Parsing definitions
+/// Parsing definitions
 namespace parser_actors {
 
-    class assign_bool {
-        bool & bo;
-    public:
+class assign_bool {
+  bool &bo;
 
-        assign_bool(bool& b2) : bo(b2) {}
+public:
+  assign_bool(bool &b2) : bo(b2) {}
 
-        template <class iter>
-        void operator()(const iter&  a, const iter& b ) const {
-            bo=(std::string(a,b)=="true");
-        }
-    };
+  template <class iter> void operator()(const iter &a, const iter &b) const {
+    bo = (std::string(a, b) == "true");
+  }
+};
 
+class assign_dir {
+  int &dir;
+  bool &sign;
 
+public:
+  assign_dir(int &dir2, bool &sign2) : dir(dir2), sign(sign2) {}
 
-    class assign_dir {
-        int & dir;
-        bool & sign;
-    public:
+  template <class iter> void operator()(const iter &a, const iter &b) const {
+    dir = a[1] - 'x';
+    sign = (a[0] == '-');
+  }
+};
 
-        assign_dir(int & dir2, bool& sign2) : dir(dir2), sign(sign2) {}
+class assign_input_transformation {
+  std::vector<int> &dir;
+  std::vector<bool> &signs;
 
-        template <class iter>
-        void operator()(const iter&  a, const iter& b ) const {
-            dir=a[1]-'x';
-            sign=(a[0]=='-');
-        }
-    };
+public:
+  assign_input_transformation(std::vector<int> &dir2, std::vector<bool> &sign2)
+      : dir(dir2), signs(sign2) {}
 
-    class assign_input_transformation {
-        std::vector<int> & dir;
-        std::vector<bool> & signs;
-    public:
+  template <class iter> void operator()(const iter &a, const iter &b) const {
+    dir.push_back(a[1] - 'x');
+    signs.push_back(a[0] == '-');
+  }
+};
 
-        assign_input_transformation(std::vector<int> & dir2, std::vector<bool> & sign2) : dir(dir2), signs(sign2) {}
+template <class C> class assign_enum {
+  C &a;
+  const C b;
 
-        template <class iter>
-        void operator()(const iter&  a, const iter& b ) const {
-            dir.push_back(a[1]-'x');
-            signs.push_back(a[0]=='-');
-        }
+public:
+  assign_enum(C &x, const C B) : a(x), b(B) {}
 
+  template <class iter> void operator()(const iter &v, const iter &w) const {
+    a = b;
+  }
+};
 
-    };
-
-    template <class C>
-    class assign_enum {
-        C& a;
-        const C b;
-    public:
-        assign_enum(C& x, const C B): a(x), b(B) {}
-
-        template <class iter>
-        void operator()(const iter&  v, const iter& w ) const  {
-            a=b;
-        }
-    };
-
-
-
-}
+} // namespace parser_actors
 
 #endif /* PARSER_ACTORS_H_ */

@@ -13,19 +13,17 @@
    License:         MIT (X11), see file LICENSE in the base directory
 ============================================================================= */
 
-
 #include <vector>
 
 namespace geom {
 
-  template <int D> class cell {
-  public:
-    unsigned int Points[1 << D];
-  };
+template <int D> class cell {
+public:
+  unsigned int Points[1 << D];
+};
 
-  template <int D> class cells:public std::vector<cell<D> >  {};
+template <int D> class cells : public std::vector<cell<D>> {};
 
-}
+} // namespace geom
 
-
-#endif //DEF_CELLS_H
+#endif // DEF_CELLS_H
