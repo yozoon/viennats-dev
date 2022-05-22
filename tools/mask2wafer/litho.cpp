@@ -5,25 +5,23 @@
  *      Author: filipov
  */
 
-
-#include "DrLithoVTK.h"
 #include "DrLithoVTK.cpp"
+#include "DrLithoVTK.h"
 
 using namespace std;
 
-int main(int argc, char * argv[])
-{
-	// Populate the data structure
-	DrL::DrLithoVTK mask(argv[1]);
+int main(int argc, char *argv[]) {
+  // Populate the data structure
+  DrL::DrLithoVTK mask(argv[1]);
 
-	// Print ViennaTS-readable mask VTK
-//	mask.PrintMaskVTK(argv[1]);
+  // Print ViennaTS-readable mask VTK
+  //	mask.PrintMaskVTK(argv[1]);
 
-	// Pass mask data to generate wafer
-	DrL::DrLithoWafer wafer(mask);
+  // Pass mask data to generate wafer
+  DrL::DrLithoWafer wafer(mask);
 
-	// Print out the wafer data to VTK
-	wafer.PrintVTK(argv[1]);
+  // Print out the wafer data to VTK
+  wafer.PrintVTK(argv[1]);
 
-	return 0;
+  return 0;
 }
